@@ -3,36 +3,43 @@ import { useNavigate } from 'react-router-dom';
 import { questions } from '../data/data';
 
 export const Question = () => {
-  const { cnt, inc, addMBTI, mbti } = useStore(
-    ({ count, increaseCount, addMBTI, mbti }) => ({
-      cnt: count,
-      inc: increaseCount,
-      addMBTI,
-      mbti,
-    })
-  );
+  const {
+    count: cnt,
+    increaseCount: inc,
+    decreaseCount: dec,
+    addMBTI,
+    decMBTI,
+  } = useStore((store) => store);
   const navigate = useNavigate();
 
   const nextMBTI = (choice: number) => {
     cnt === 9 ? navigate('/result') : inc();
-    // console.log(questions[cnt].choices[choice].value);
     addMBTI(questions[cnt].choices[choice].value);
+  };
+
+  const prevPage = () => {
+    cnt !== 0 && dec();
+    decMBTI();
+    cnt < 1 && navigate(-1);
   };
 
   return (
     <div className='container sub'>
       <div className='progress'>
-        <div className='value'>{mbti}</div>
+        <div className='value' style={{ width: `${(cnt + 1) * 10}%` }}></div>
       </div>
+
+      <button onClick={prevPage}>뒤로가기</button>
       <div className='questionsBox'>
-        <div className='number'>{cnt}</div>
-        <div className='question'>{questions[cnt].question}</div>
-        <button className='choice choice1' onClick={() => nextMBTI(0)}>
-          {questions[cnt].choices[0].text}
-        </button>
-        <button className='choice choice2' onClick={() => nextMBTI(1)}>
-          {questions[cnt].choices[1].text}
-        </button>
+        <div className='number'>{questions[cnt]?.number}</div>
+        <div className='question'>{questions[cnt]?.question}</div>
+        {questions[cnt]?.choices.map((choice, idx) => (
+          <button
+            className={`choice choice${idx + 1}`}
+            onClick={() => nextMBTI(idx)}
+            dangerouslySetInnerHTML={{ __html: choice.text }}
+          ></button>
+        ))}
       </div>
     </div>
   );

@@ -5,7 +5,9 @@ interface MBTIStoreType {
   count: number;
   mbti: string;
   increaseCount: () => void;
+  decreaseCount: () => void;
   addMBTI: (MBTItype: string) => void;
+  decMBTI: () => void;
   reset: () => void;
 }
 
@@ -17,8 +19,18 @@ export const useStore = create<MBTIStoreType>()(
 
     // set 함수 사용 #1 현재 상태를 기반으로 새로운 상태를 리턴하는 함수
     increaseCount: () => set(() => ({ count: get().count + 1 }), false, 'cnt'),
+    decreaseCount: () => set(() => ({ count: get().count - 1 }), false, 'cnt'),
     addMBTI: (MBTItype: string) =>
       set(() => ({ mbti: `${get().mbti}${MBTItype}` }), false, 'MBTI'),
+    decMBTI: () =>
+      set(
+        ({ mbti }) =>
+          mbti.length < 5
+            ? { mbti: mbti.substring(0, mbti.length - 1) }
+            : { mbti },
+        false,
+        'MBTI'
+      ),
     reset: () => set({ count: 0, mbti: '' }, false, 'BackToMain'),
   }))
 );

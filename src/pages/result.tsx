@@ -26,13 +26,16 @@ export const Result = () => {
     mbti: MBTIType;
     reset: () => void;
   };
+
   return (
     <div className='container re'>
       <div className='reTitle'>
         <h3>나는 어떤 MBTI일까?</h3>
       </div>
       <div className='titleWrap'>
-        <h4 className='pTitle'>{MBTIresults[mbtis[mbti]].title}</h4>
+        <h4 className='pTitle' style={{ textTransform: 'uppercase' }}>
+          {mbti}
+        </h4>
       </div>
       {/* <img src="" alt="캐릭터" className="character"> */}
       <div className='resultWrap'>
